@@ -1,26 +1,24 @@
 package com.epam.tat.matrixprocessor.impl;
 
 import com.epam.tat.matrixprocessor.IMatrixProcessor;
+import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
 
 import java.util.Scanner;
 
 public class MatrixProcessor implements IMatrixProcessor {
 
-
 	private int i;
 	private int j;
-	private int row;
-	private int column;
 	private double[][] array;
 
 
 
 	@Override
 	public double[][] transpose(double[][] matrix) {
-		//todo throw new UnsupportedOperationException("You need to implement this method");
+		//throw new MatrixProcessorException("Illegal operation.");
 
-		for (i = 0; i < column; i++) {
-			for (j = 0; j < row; j++) {
+		for (i = 0; i < matrix.length; i++) {
+			for (j = 0; j <  matrix[matrix.length].length; j++) {
 				System.out.print(array[j][i] + " ");
 			}
 			System.out.println(" ");
@@ -46,7 +44,8 @@ public class MatrixProcessor implements IMatrixProcessor {
 	 */
 	@Override
 	public double[][] multiplyMatrices(double[][] firstMatrix, double[][] secondMatrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		throw new MatrixProcessorException("Illegal operation.");
+
 
 
 	}
@@ -81,39 +80,31 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	public static void main(String args[]) {
 
-		int i, j;
-		Scanner s = new Scanner(System.in);
-		System.out.println("Enter rows number (minimum=1, maximum=9):");
-		int row = s.nextInt();
-		while (row <= 0 || row > 9) {
-			System.out.println("Invalid row number (minimum=1, maximum=9). Enter again:");
-			row = s.nextInt();
-		}
+		double[][] matrix = {{1.1, 0.3}, {-2.03, 3.67}};
 
-		System.out.println("Enter columns number (minimum=1, maximum=9):");
-		int column = s.nextInt();
-		while (column <= 0 || column > 9) {
-			System.out.println("Invalid column number (minimum=1, maximum=9). Enter again:");
-			column = s.nextInt();
-		}
-
-		double[][] array = new double[row][column];
-
-		System.out.println("Enter numbers for matrix:");
-		for (i = 0; i < row; i++) {
-			for (j = 0; j < column; j++) {
-				array[i][j] = s.nextDouble();
-				System.out.print(" ");
+		System.out.println("\tThe original matrix is:");
+		for (int i=0; i < matrix.length; i++){
+			for(int j=0; j < matrix[0].length; j++){
+				System.out.print(matrix[i][j] + "  ");
 			}
+			System.out.println();
 		}
 
-		System.out.println("The original matrix is:");
-		for (i = 0; i < row; i++) {
-			for (j = 0; j < column; j++) {
-				System.out.print(array[i][j] + " ");
-			}
-			System.out.println(" ");
-		}
+
+		System.out.println("\tThe transposed matrix is:");
+
+
+		System.out.println("\tThe turned clockwise matrix is:");
+
+
+		System.out.println("\tThe multiplication of matrices is:");
+
+
+		System.out.println("\the inversed matrix is:");
+
+
+		System.out.println("\tThe matrix determinant is:");
 
 	}
+
 }
