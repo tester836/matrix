@@ -3,6 +3,8 @@ package com.epam.tat.matrixprocessor;
 
 public interface IMatrixProcessor {
 
+
+
     double[][] transpose(double[][] matrix);
 
     double[][] turnClockwise(double[][] matrix);

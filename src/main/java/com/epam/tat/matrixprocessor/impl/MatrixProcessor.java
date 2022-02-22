@@ -3,27 +3,33 @@ package com.epam.tat.matrixprocessor.impl;
 import com.epam.tat.matrixprocessor.IMatrixProcessor;
 import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
 
-import java.util.Scanner;
+import java.util.Arrays;
 
 public class MatrixProcessor implements IMatrixProcessor {
 
-	private int i;
-	private int j;
-	private double[][] array;
-
+	public String displayMatrix(double[][] matrix){
+		StringBuilder sb = new StringBuilder();
+		for (double[] row : matrix){
+			sb.append(Arrays.toString(row)).append("\n");
+		}
+		return sb.toString();
+	}
 
 
 	@Override
 	public double[][] transpose(double[][] matrix) {
-		//throw new MatrixProcessorException("Illegal operation.");
+		try {
+			double[][] transMatrix = new double[matrix.length][matrix[0].length];
 
-		for (i = 0; i < matrix.length; i++) {
-			for (j = 0; j <  matrix[matrix.length].length; j++) {
-				System.out.print(array[j][i] + " ");
+			for (int i = 0; i < matrix.length; i++) {
+				for (int j = 0; j < matrix[0].length; j++) {
+					transMatrix[i][j] = matrix[j][i];
+				}
 			}
-			System.out.println(" ");
+			return transMatrix;
+		} catch (MatrixProcessorException ex){
+			throw new MatrixProcessorException("Illegal operation.");
 		}
-		return matrix;
 	}
 
 
@@ -74,37 +80,6 @@ public class MatrixProcessor implements IMatrixProcessor {
 	@Override
 	public double getMatrixDeterminant(double[][] matrix) {
 		throw new UnsupportedOperationException("You need to implement this method");
-	}
-
-
-
-	public static void main(String args[]) {
-
-		double[][] matrix = {{1.1, 0.3}, {-2.03, 3.67}};
-
-		System.out.println("\tThe original matrix is:");
-		for (int i=0; i < matrix.length; i++){
-			for(int j=0; j < matrix[0].length; j++){
-				System.out.print(matrix[i][j] + "  ");
-			}
-			System.out.println();
-		}
-
-
-		System.out.println("\tThe transposed matrix is:");
-
-
-		System.out.println("\tThe turned clockwise matrix is:");
-
-
-		System.out.println("\tThe multiplication of matrices is:");
-
-
-		System.out.println("\the inversed matrix is:");
-
-
-		System.out.println("\tThe matrix determinant is:");
-
 	}
 
 }
