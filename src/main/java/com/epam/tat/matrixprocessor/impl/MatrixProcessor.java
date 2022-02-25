@@ -71,34 +71,73 @@ public class MatrixProcessor implements IMatrixProcessor {
 		}
 	}
 
-	/**
-	 * This method returns the inverse of the matrix
-	 * <p>
-	 * See {https://en.wikipedia.org/wiki/Invertible_matrix}
-	 *
-	 * @param matrix - input matrix
-	 * @return inverse matrix for input matrix
-	 */
 	@Override
 	public double[][] getInverseMatrix(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		try {
+			double determinantNumber = getMatrixDeterminant(matrix);
+			int rowLength = matrix.length;
+			int columnLength = matrix[0].length;
+			double[][] temporaryInverseMatrix = new double[rowLength][columnLength];
+			double[][] temp = new double[rowLength][columnLength];
 
+			for (int row = 0; row < rowLength; row++) {
+				for (int column = 0; column < rowLength; column++) {
+					getCofactor(matrix, temp, row, column, rowLength);
+					temporaryInverseMatrix[row][column] = Math.pow(-1, row + column)
+							* getMatrixDeterminant(temp);
+				}
+			}
 
+			double[][] finalInverseMatrix = new double[rowLength][columnLength];
+
+			for (int i = 0; i < rowLength; i++) {
+				for (int j = 0; j < columnLength; j++) {
+					finalInverseMatrix[i][j] = Math.round((temporaryInverseMatrix[j][i] / determinantNumber) * scale) / scale;
+				}
+			}
+			return finalInverseMatrix;
+		} catch (MatrixProcessorException ex) {
+			throw new MatrixProcessorException("Illegal operation.");
+		}
 	}
 
-
-
-	/**
-	 * This method returns the determinant of the matrix
-	 * <p>
-	 * See {https://en.wikipedia.org/wiki/Determinant}
-	 *
-	 * @param matrix - input matrix
-	 * @return determinant of input matrix
-	 */
 	@Override
 	public double getMatrixDeterminant(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		try {
+			double determinant = 0;
+			int rows = matrix.length;
+			int columns = matrix[0].length;
+			if (rows == 1) {
+				return matrix[0][0];
+			}
+
+			double[][] temp = new double[rows][columns];
+			int sign = 1;
+			for (int row = 0; row < rows; row++) {
+				getCofactor(matrix, temp, 0, row, rows);
+				determinant += sign * matrix[0][row]
+						* getMatrixDeterminant(temp);
+				sign = -sign;
+			}
+			return determinant;
+		} catch (MatrixProcessorException ex) {
+			throw new MatrixProcessorException("Illegal operation.");
+		}
+
+	}
+	private static void getCofactor(double[][] matrix, double[][] temp, int oldRow, int oldColumn, int rows) {
+		int i = 0, j = 0;
+		for (int row = 0; row < rows; row++) {
+			for (int column = 0; column < rows; column++) {
+				if (row != oldRow && column != oldColumn) {
+					temp[i][j++] = matrix[row][column];
+					if (j == rows - 1) {
+						j = 0;
+						i++;
+					}
+				}
+			}
+		}
 	}
 
 }

@@ -22,9 +22,11 @@ public class Main {
                 matrixProcessor.displayMatrix(matrixProcessor.multiplyMatrices(firstMatrix, secondMatrix)));
 
 
-        System.out.println("\tThe inversed matrix is:");
+        System.out.println("\tThe inversed matrix is:\n" +
+                matrixProcessor.displayMatrix(matrixProcessor.getInverseMatrix(matrix)));
 
-        System.out.println("\tThe matrix determinant is:");
+        System.out.println("\tThe matrix determinant is:\n" +
+                matrixProcessor.getMatrixDeterminant(matrix));
 
     }
 
