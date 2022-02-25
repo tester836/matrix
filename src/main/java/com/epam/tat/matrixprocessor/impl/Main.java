@@ -1,16 +1,13 @@
 package com.epam.tat.matrixprocessor.impl;
 
-import java.util.Arrays;
-
 public class Main {
-
 
     public static void main(String args[]) {
         MatrixProcessor matrixProcessor = new MatrixProcessor();
 
         double[][] matrix = {{1.1, 0.3}, {-2.03, 0.0}, {3.456, 33.6543}};
-        double[][] firstMatrix = {{1, 0}, {-2, 3}};
-        double[][] secondMatrix = {{-3, 15}, {5, -7}};
+        double[][] firstMatrix = {{1.1, 0}, {-2.12, 3.4}};
+        double[][] secondMatrix = {{-3.1244, 15.5}, {5.01, -7.14}};
 
         System.out.println("\n\tThe original matrix is:\n" +
                 matrixProcessor.displayMatrix(matrix));

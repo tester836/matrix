@@ -2,13 +2,13 @@ package com.epam.tat.matrixprocessor.impl;
 
 import com.epam.tat.matrixprocessor.IMatrixProcessor;
 import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
-
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 
 public class MatrixProcessor implements IMatrixProcessor {
+
+	private int precision = 3;
+	double scale = Math.pow(10.0, precision);
 
 	public String displayMatrix(double[][] matrix){
 		StringBuilder sb = new StringBuilder();
@@ -59,11 +59,12 @@ public class MatrixProcessor implements IMatrixProcessor {
 	public double[][] multiplyMatrices(double[][] firstMatrix, double[][] secondMatrix) {
 		try {
 			double[][] resultMatrix = new double[firstMatrix.length][secondMatrix[0].length];
+
 			for (int i = 0; i < resultMatrix[0].length; i++)
 				for (int j = 0; j < resultMatrix.length; j++)
-					for (int k = 0; k < firstMatrix[0].length; k++)
-						resultMatrix[i][j] = resultMatrix[i][j] + firstMatrix[i][k] * secondMatrix[k][j];
-
+					for (int k = 0; k < firstMatrix[0].length; k++) {
+						resultMatrix[i][j] = Math.round((resultMatrix[i][j] + firstMatrix[i][k] * secondMatrix[k][j]) * scale) / scale;
+					}
 			return resultMatrix;
 		} catch (MatrixProcessorException ex) {
 			throw new MatrixProcessorException("Illegal operation.");
@@ -81,7 +82,11 @@ public class MatrixProcessor implements IMatrixProcessor {
 	@Override
 	public double[][] getInverseMatrix(double[][] matrix) {
 		throw new UnsupportedOperationException("You need to implement this method");
+
+
 	}
+
+
 
 	/**
 	 * This method returns the determinant of the matrix
