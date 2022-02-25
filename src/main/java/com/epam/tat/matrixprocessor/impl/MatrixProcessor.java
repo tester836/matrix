@@ -4,6 +4,8 @@ import com.epam.tat.matrixprocessor.IMatrixProcessor;
 import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class MatrixProcessor implements IMatrixProcessor {
@@ -15,7 +17,6 @@ public class MatrixProcessor implements IMatrixProcessor {
 		}
 		return sb.toString();
 	}
-
 
 	@Override
 	public double[][] transpose(double[][] matrix) {
@@ -32,20 +33,25 @@ public class MatrixProcessor implements IMatrixProcessor {
 		}
 	}
 
-	/**
-	 * The method flips the matrix clockwise.
-	 * Ex.:
-	 * * |1 2|			|5 3 1|
-	 * * |3 4|   ====>	|6 4 2|
-	 * * |5 6|
-	 *
-	 * @param matrix - rotation matrix
-	 * @return rotated matrix
-	 */
-
 	@Override
 	public double[][] turnClockwise(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+
+		try {
+		double[][] rotatedMatrix = transpose(matrix);
+			for (int i = 0; i < rotatedMatrix.length; i++) {
+				int lowRow = 0, highRow = rotatedMatrix[0].length - 1;
+				while (lowRow < highRow) {
+					double temp = rotatedMatrix[i][lowRow];
+					rotatedMatrix[i][lowRow] = rotatedMatrix[i][highRow];
+					rotatedMatrix[i][highRow] = temp;
+					lowRow++;
+					highRow--;
+				}
+			}
+			return rotatedMatrix;
+		} catch (MatrixProcessorException ex){
+			throw new MatrixProcessorException("Illegal operation.");
+		}
 	}
 
 
