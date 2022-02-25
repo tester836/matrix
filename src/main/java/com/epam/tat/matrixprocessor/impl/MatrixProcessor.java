@@ -5,6 +5,7 @@ import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
 
 import java.util.Arrays;
 
+
 public class MatrixProcessor implements IMatrixProcessor {
 
 	public String displayMatrix(double[][] matrix){
@@ -19,19 +20,28 @@ public class MatrixProcessor implements IMatrixProcessor {
 	@Override
 	public double[][] transpose(double[][] matrix) {
 		try {
-			double[][] transMatrix = new double[matrix.length][matrix[0].length];
-
+			double[][] transposedMatrix = new double[matrix[0].length][matrix.length];
 			for (int i = 0; i < matrix.length; i++) {
 				for (int j = 0; j < matrix[0].length; j++) {
-					transMatrix[i][j] = matrix[j][i];
+					transposedMatrix[j][i] = matrix[i][j];
 				}
 			}
-			return transMatrix;
+			return transposedMatrix;
 		} catch (MatrixProcessorException ex){
 			throw new MatrixProcessorException("Illegal operation.");
 		}
 	}
 
+	/**
+	 * The method flips the matrix clockwise.
+	 * Ex.:
+	 * * |1 2|			|5 3 1|
+	 * * |3 4|   ====>	|6 4 2|
+	 * * |5 6|
+	 *
+	 * @param matrix - rotation matrix
+	 * @return rotated matrix
+	 */
 
 	@Override
 	public double[][] turnClockwise(double[][] matrix) {
@@ -39,21 +49,19 @@ public class MatrixProcessor implements IMatrixProcessor {
 	}
 
 
-	/**
-	 * This method multiplies matrix firstMatrix by matrix secondMatrix
-	 * <p>
-	 * See {https://en.wikipedia.org/wiki/Matrix_multiplication}
-	 *
-	 * @param firstMatrix  - first matrix to multiply
-	 * @param secondMatrix - second matrix to multiply
-	 * @return result matrix
-	 */
 	@Override
 	public double[][] multiplyMatrices(double[][] firstMatrix, double[][] secondMatrix) {
-		throw new MatrixProcessorException("Illegal operation.");
+		try {
+			double[][] resultMatrix = new double[firstMatrix.length][secondMatrix[0].length];
+			for (int i = 0; i < resultMatrix[0].length; i++)
+				for (int j = 0; j < resultMatrix.length; j++)
+					for (int k = 0; k < firstMatrix[0].length; k++)
+						resultMatrix[i][j] = resultMatrix[i][j] + firstMatrix[i][k] * secondMatrix[k][j];
 
-
-
+			return resultMatrix;
+		} catch (MatrixProcessorException ex) {
+			throw new MatrixProcessorException("Illegal operation.");
+		}
 	}
 
 	/**
