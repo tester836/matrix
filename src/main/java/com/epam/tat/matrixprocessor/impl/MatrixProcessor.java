@@ -2,6 +2,8 @@ package com.epam.tat.matrixprocessor.impl;
 
 import com.epam.tat.matrixprocessor.IMatrixProcessor;
 import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
+
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 
@@ -74,28 +76,18 @@ public class MatrixProcessor implements IMatrixProcessor {
 	@Override
 	public double[][] getInverseMatrix(double[][] matrix) {
 		try {
-			double determinantNumber = getMatrixDeterminant(matrix);
-			int rowLength = matrix.length;
-			int columnLength = matrix[0].length;
-			double[][] temporaryInverseMatrix = new double[rowLength][columnLength];
-			double[][] temp = new double[rowLength][columnLength];
+			double determinant = getMatrixDeterminant(matrix);
+			matrix = getAdjoint(matrix);
+			double[][] inversedMatrix = new double[matrix.length][matrix.length];
 
-			for (int row = 0; row < rowLength; row++) {
-				for (int column = 0; column < rowLength; column++) {
-					getCofactor(matrix, temp, row, column, rowLength);
-					temporaryInverseMatrix[row][column] = Math.pow(-1, row + column)
-							* getMatrixDeterminant(temp);
+			for (int row = 0; row < matrix.length; row++) {
+				for (int col = 0; col < matrix[0].length; col++) {
+					inversedMatrix[row][col] = Math.round((matrix[row][col] / determinant) * scale) / scale;
+
 				}
 			}
 
-			double[][] finalInverseMatrix = new double[rowLength][columnLength];
-
-			for (int i = 0; i < rowLength; i++) {
-				for (int j = 0; j < columnLength; j++) {
-					finalInverseMatrix[i][j] = Math.round((temporaryInverseMatrix[j][i] / determinantNumber) * scale) / scale;
-				}
-			}
-			return finalInverseMatrix;
+			return inversedMatrix;
 		} catch (MatrixProcessorException ex) {
 			throw new MatrixProcessorException("Illegal operation.");
 		}
@@ -104,40 +96,83 @@ public class MatrixProcessor implements IMatrixProcessor {
 	@Override
 	public double getMatrixDeterminant(double[][] matrix) {
 		try {
-			double determinant = 0;
-			int rows = matrix.length;
-			int columns = matrix[0].length;
-			if (rows == 1) {
-				return matrix[0][0];
+			if (matrix.length == 2) {
+				return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+			} else {
+				double determinant = 0;
+
+				for (int rows = 0; rows < matrix.length; rows++) {
+					matrix = arrayOfRange(matrix, 0, rows);
+
+					if (rows % 2 == 0) {
+						determinant += matrix[0][rows] * getMatrixDeterminant(matrix);
+					} else {
+						determinant -= matrix[0][rows] * getMatrixDeterminant(matrix);
+					}
+				}
+				return determinant;
 			}
 
-			double[][] temp = new double[rows][columns];
-			int sign = 1;
-			for (int row = 0; row < rows; row++) {
-				getCofactor(matrix, temp, 0, row, rows);
-				determinant += sign * matrix[0][row]
-						* getMatrixDeterminant(temp);
-				sign = -sign;
-			}
-			return determinant;
 		} catch (MatrixProcessorException ex) {
 			throw new MatrixProcessorException("Illegal operation.");
 		}
 
 	}
-	private static void getCofactor(double[][] matrix, double[][] temp, int oldRow, int oldColumn, int rows) {
-		int i = 0, j = 0;
-		for (int row = 0; row < rows; row++) {
-			for (int column = 0; column < rows; column++) {
-				if (row != oldRow && column != oldColumn) {
-					temp[i][j++] = matrix[row][column];
-					if (j == rows - 1) {
-						j = 0;
-						i++;
+
+	private double[][] arrayOfRange(double[][] matrix, int rows, int columns) {
+
+		matrix = new double[matrix.length - 1][matrix[0].length - 1];
+		int row_sub = 0;
+
+		for (int row = 0; row < matrix.length; row++) {
+
+			int col_sub = 0;
+			if (row != rows) {
+
+				for (int col = 0; col < matrix[row].length; col++) {
+
+					if (col != columns) {
+						matrix[row - row_sub][col - col_sub] = matrix[row][col];
+					} else {
+						col_sub = 1;
 					}
+
 				}
+
+			} else {
+				row_sub = 1;
+			}
+
+		}
+
+		return matrix;
+	}
+
+	public double[][] getAdjoint(double[][] matrix) {
+		double[][] adj = getDeterminantOfMinors(matrix);
+		int i = 1;
+
+		for (int row = 0; row < matrix.length; row++) {
+			for (int col = 0; col < matrix[0].length; col++) {
+				adj[row][col] *= i;
+				i *= -1;
 			}
 		}
+		return adj;
+	}
+
+	public double[][] getDeterminantOfMinors(double[][] matrix) {
+		matrix = transpose(matrix);
+		double[][] resultMatrix = new double[matrix.length][matrix[0].length];
+
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				matrix = arrayOfRange(matrix, i, j);
+				resultMatrix[i][j] = getMatrixDeterminant(matrix);
+			}
+		}
+
+		return resultMatrix;
 	}
 
 }
