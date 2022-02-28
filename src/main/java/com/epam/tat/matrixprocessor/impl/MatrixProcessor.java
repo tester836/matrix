@@ -149,26 +149,26 @@ public class MatrixProcessor implements IMatrixProcessor {
 	}
 
 	public double[][] getAdjoint(double[][] matrix) {
-		double[][] adj = getDeterminantOfMinors(matrix);
+		double[][] adjointMatrix = getDeterminantOfMinors(matrix);
 		int i = 1;
 
 		for (int row = 0; row < matrix.length; row++) {
 			for (int col = 0; col < matrix[0].length; col++) {
-				adj[row][col] *= i;
+				adjointMatrix[row][col] *= i;
 				i *= -1;
 			}
 		}
-		return adj;
+		return adjointMatrix;
 	}
 
 	public double[][] getDeterminantOfMinors(double[][] matrix) {
 		matrix = transpose(matrix);
 		double[][] resultMatrix = new double[matrix.length][matrix[0].length];
 
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[0].length; j++) {
-				matrix = arrayOfRange(matrix, i, j);
-				resultMatrix[i][j] = getMatrixDeterminant(matrix);
+		for (int rows = 0; rows < matrix.length; rows++) {
+			for (int columns = 0; columns < matrix[0].length; columns++) {
+				matrix = arrayOfRange(matrix, rows, columns);
+				resultMatrix[rows][columns] = getMatrixDeterminant(matrix);
 			}
 		}
 
